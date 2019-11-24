@@ -26,8 +26,7 @@ console.log("File Reading...");
 
 // SERVER
 
-// If you only need to read the data once, do it outside the callback
-
+// When replacing placeholders, use the same placeholders across multiple pages, so you can have one method replace all placeholders with values. When making the method, account for every variable in the object, even if it is not on the target page.
 const replaceTemplate = (temp, product) => {
   let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
   output = output.replace(/{%IMAGE%}/g, product.image);
@@ -56,14 +55,16 @@ const tempProduct = fs.readFileSync(
   `${__dirname}/templates/template-product.html`,
   "utf-8"
 );
+
+// If you only need to read the data once, do it outside the callback
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
-  const pathName = req.url;
+  const { query, pathname } = url.parse(req.url, true);
 
   // Overview
-  if (pathName === "/" || pathName === "/overview") {
+  if (pathname === "/" || pathname === "/overview") {
     res.writeHead(200, { "Content-type": "text/html" });
 
     const cardsHtml = dataObj.map(el => replaceTemplate(tempCard, el)).join("");
@@ -74,11 +75,14 @@ const server = http.createServer((req, res) => {
   }
 
   // Product
-  else if (pathName === "/product") {
-    res.end("product");
+  else if (pathname === "/product") {
+    res.writeHead(200, { "Content-type": "text/html" });
+    const product = dataObj[query.id];
+    output = replaceTemplate(tempProduct, product);
+    res.end(output);
   }
   // API
-  else if (pathName === "/api") {
+  else if (pathname === "/api") {
     res.writeHead(200, { "Content-type": "application/json" });
     res.end(data);
   }
