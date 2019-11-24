@@ -1,0 +1,19 @@
+{
+  "name": "nodefarm",
+  "version": "1.0.0",
+  "description": "Learning node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kenkirkley/Nodejs-Practice.git"
+  },
+  "author": "Ken Kirkley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kenkirkley/Nodejs-Practice/issues"
+  },
+  "homepage": "https://github.com/kenkirkley/Nodejs-Practice#readme"
+}
